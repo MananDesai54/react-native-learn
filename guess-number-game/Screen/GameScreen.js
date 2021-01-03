@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   Button,
   Alert,
   ScrollView,
+  FlatList,
+  Dimensions,
 } from "react-native";
 import NumberContainer from "../Components/NumberComponent";
 import Card from "../Components/Card";
@@ -32,6 +34,19 @@ const GameScreen = (props) => {
   const [previousGuess, setPreviousGuess] = useState([initGuess]);
   const currentMin = useRef(1);
   const currentMax = useRef(100);
+
+  const [width, setWidth] = useState(Dimensions.get("window").width);
+
+  useEffect(() => {
+    const updateOrientation = () => {
+      setWidth(Dimensions.get("window").width);
+    };
+
+    Dimensions.addEventListener("change", updateOrientation);
+    return () => {
+      Dimensions.removeEventListener("change", updateOrientation);
+    };
+  }, [width]);
 
   useEffect(() => {
     if (currentGuess === props.userChoice) {
@@ -62,47 +77,88 @@ const GameScreen = (props) => {
     // setGameRound(curRound=>curRound+1);
   };
 
-  return (
-    <ScrollView>
-      <View style={styles.screen}>
-        <TitleText>User's Current Guess</TitleText>
-        <NumberContainer number={currentGuess} />
-        <Card style={styles.buttons}>
-          <ButtonComponent
-            style={{ backgroundColor: "#333" }}
-            onPress={() => {
-              nextGuessHandler("lower");
-            }}
-          >
-            <Ionicons name="md-remove" size={24} color="white" />
-          </ButtonComponent>
-          <ButtonComponent
-            style={{ backgroundColor: "#333" }}
-            onPress={() => {
-              nextGuessHandler("greater");
-            }}
-          >
-            <Ionicons name="md-add" size={24} color="white" />
-          </ButtonComponent>
-        </Card>
-        <View style={styles.guess}>
-          <ScrollView>
-            {previousGuess.map((guess) => (
-              <View style={styles.guesses} key={guess}>
-                <Text style={styles.guessText}>{guess}</Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+  let layout = (
+    <>
+      <NumberContainer number={currentGuess} />
+      <Card style={styles.buttons}>
+        <ButtonComponent
+          style={{ backgroundColor: "#333" }}
+          onPress={() => {
+            nextGuessHandler("lower");
+          }}
+        >
+          <Ionicons name="md-remove" size={24} color="white" />
+        </ButtonComponent>
+        <ButtonComponent
+          style={{ backgroundColor: "#333" }}
+          onPress={() => {
+            nextGuessHandler("greater");
+          }}
+        >
+          <Ionicons name="md-add" size={24} color="white" />
+        </ButtonComponent>
+      </Card>
+    </>
+  );
+
+  if (width > 600) {
+    layout = (
+      <View style={styles.big}>
+        <ButtonComponent
+          style={{ backgroundColor: "#333" }}
+          onPress={() => {
+            nextGuessHandler("lower");
+          }}
+        >
+          <Ionicons name="md-remove" size={24} color="white" />
+        </ButtonComponent>
+        <NumberContainer
+          number={currentGuess}
+          style={{ marginHorizontal: 10 }}
+        />
+        <ButtonComponent
+          style={{ backgroundColor: "#333" }}
+          onPress={() => {
+            nextGuessHandler("greater");
+          }}
+        >
+          <Ionicons name="md-add" size={24} color="white" />
+        </ButtonComponent>
       </View>
-    </ScrollView>
+    );
+  }
+
+  return (
+    <Fragment>
+      <ScrollView>
+        <View style={styles.screen}>
+          <TitleText>User's Current Guess</TitleText>
+          {layout}
+        </View>
+        <FlatList
+          keyExtractor={(item) => item.toString()}
+          contentContainerStyle={styles.scroll}
+          data={previousGuess}
+          renderItem={({ item }) => (
+            <View style={styles.guesses}>
+              <Text style={styles.guessText}>{item}</Text>
+            </View>
+          )}
+        />
+      </ScrollView>
+    </Fragment>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    // justifyContent:'center',
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  big: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
   buttons: {
@@ -110,22 +166,31 @@ const styles = StyleSheet.create({
     width: 300,
     maxWidth: "90%",
     justifyContent: "space-around",
-    marginVertical: 10,
+    marginVertical: Dimensions.get("window").height > 600 ? 20 : 10,
   },
   guess: {
     flex: 1,
   },
   guesses: {
-    paddingHorizontal: 100,
+    width: 200,
     paddingVertical: 15,
     borderRadius: 10,
     marginVertical: 5,
     borderColor: colors.ACCENT,
     borderWidth: 2,
     backgroundColor: "white",
+    justifyContent: "center",
+  },
+  guessText: {
+    textAlign: "center",
   },
   guess: {
     color: colors.ACCENT,
+  },
+  scroll: {
+    justifyContent: "flex-end",
+    alignItems: "center",
+    flexGrow: 1,
   },
 });
 

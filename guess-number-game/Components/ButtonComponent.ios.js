@@ -1,14 +1,23 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableNativeFeedback,
+  Platform,
+} from "react-native";
 import Colors from "../constants/colors";
 
 const ButtonComponent = (props) => {
   return (
-    <TouchableOpacity activeOpacity={0.4} onPress={props.onPress}>
-      <View style={{ ...styles.btn, ...props.style }}>
-        <Text style={styles.btnTxt}>{props.children}</Text>
-      </View>
-    </TouchableOpacity>
+    <View style={{ borderRadius: 20, overflow: "hidden" }}>
+      <TouchableOpacity activeOpacity={0.4} onPress={props.onPress}>
+        <View style={{ ...styles.btn, ...props.style }}>
+          <Text style={styles.btnTxt}>{props.children}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 

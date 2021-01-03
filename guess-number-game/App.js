@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { StyleSheet, View, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  View,
+  StatusBar,
+  Dimensions,
+  SafeAreaView,
+} from "react-native";
 import Header from "./Components/Header";
 import StartGameScreen from "./Screen/StartGameScreen";
 import GameScreen from "./Screen/GameScreen";
@@ -64,7 +70,7 @@ export default function App() {
   }
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       <StatusBar
         barStyle="default"
         translucent={true}
@@ -72,12 +78,14 @@ export default function App() {
       />
       <Header title="Guess a Number" />
       {screen}
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    // width: 300,
+    // height: Dimensions.get("window").height * 0.8,
   },
 });
