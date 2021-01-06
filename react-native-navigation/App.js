@@ -4,6 +4,15 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import MealsNavigator from "./navigation/MealsNavigator";
 import { enableScreens } from "react-native-screens";
+import { createStore, combineReducers } from "redux";
+import mealsReducers from "./store/reducers/meals";
+import { Provider } from "react-redux";
+
+const rootReducers = combineReducers({
+  meals: mealsReducers,
+});
+
+const store = createStore(rootReducers);
 
 enableScreens();
 
@@ -31,12 +40,14 @@ export default function App() {
 
   return (
     <Fragment>
-      <MealsNavigator />
-      <StatusBar
-        translucent={true}
-        barStyle="default"
-        backgroundColor="rgba(0, 0, 0, 0.3)"
-      />
+      <Provider store={store}>
+        <MealsNavigator />
+        <StatusBar
+          translucent={true}
+          barStyle="default"
+          backgroundColor="rgba(0, 0, 0, 0.3)"
+        />
+      </Provider>
     </Fragment>
   );
 }
