@@ -1,14 +1,20 @@
 import React, { useState, useContext } from "react";
 import { View, Text, TextInput, Button } from "react-native";
+import ImageSelector from "../components/ImageSelector";
 import { PlaceContext } from "../context/PlaceContext";
 
 const PlaceListScreen = (props) => {
   const [title, setTitle] = useState();
+  const [imageUri, setImageUri] = useState();
   const context = useContext(PlaceContext);
 
   const addPlaceHandler = () => {
-    context.addPlace({ title });
+    context.addPlace({ title, imageUri });
     props.navigation.goBack();
+  };
+
+  const imageTaken = (uri) => {
+    setImageUri(uri);
   };
 
   return (
@@ -24,6 +30,7 @@ const PlaceListScreen = (props) => {
         value={title}
         onChangeText={setTitle}
       />
+      <ImageSelector onImageTaken={imageTaken} />
       <Button title="Add Place" onPress={addPlaceHandler} />
     </View>
   );

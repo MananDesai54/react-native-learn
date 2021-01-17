@@ -9,7 +9,7 @@ const PlaceItem = (props) => {
       style={styles.placeItem}
     >
       <Fragment>
-        <Image style={styles.image} source={{ uri: props.place.title }} />
+        <Image style={styles.image} source={{ uri: props.place.imageUri }} />
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{props.place.title}</Text>
           <Text style={styles.address}>{props.place.address}</Text>

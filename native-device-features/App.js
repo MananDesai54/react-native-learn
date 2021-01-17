@@ -7,8 +7,8 @@ import { Place } from "./models/Place";
 
 export default function App() {
   const [place, setPlace] = useState([]);
-  const addPlace = ({ title }) => {
-    const newPlace = new Place(Math.random().toString(), title);
+  const addPlace = ({ title, imageUri }) => {
+    const newPlace = new Place(Math.random().toString(), title, imageUri);
     setPlace((prevPlace) => prevPlace.concat(newPlace));
   };
 
