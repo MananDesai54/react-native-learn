@@ -1,10 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-const PlaceDetailScreen = () => {
+const PlaceDetailScreen = (props) => {
+  const place = props.route.params.place;
+
   return (
     <View>
-      <Text>Detail</Text>
+      <Text>{place.title}</Text>
     </View>
   );
 };

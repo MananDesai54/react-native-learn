@@ -1,10 +1,12 @@
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
 import PlaceListScreen from "../screens/PlaceListScreen";
 import PlaceDetailScreen from "../screens/PlaceDetailScreen";
 import NewPlaceScreen from "../screens/NewPlaceScreen";
 import MapScreen from "../screens/MapScreen";
+import CustomHeaderButton from "../components/CustomHeaderButton";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 const Stack = createStackNavigator();
 
@@ -14,23 +16,36 @@ const PlaceNavigator = () => {
       <Stack.Navigator>
         <Stack.Screen
           name="PlaceList"
-          options={{ title: "Places", headerRight: () => {} }}
           component={PlaceListScreen}
+          options={(navData) => {
+            return {
+              title: "Places",
+              headerRight: () => (
+                <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                  <Item
+                    title="Add"
+                    iconName="md-add"
+                    onPress={() => navData.navigation.navigate("NewPlace")}
+                  />
+                </HeaderButtons>
+              ),
+            };
+          }}
         />
         <Stack.Screen
           name="PlaceDetail"
-          options={{ title: "Detail" }}
           component={PlaceDetailScreen}
+          options={(navData) => ({ title: navData.route.params.place.title })}
         />
         <Stack.Screen
           name="NewPlace"
-          options={{ title: "New" }}
           component={NewPlaceScreen}
+          options={{ title: "Add Place" }}
         />
         <Stack.Screen
           name="Map"
-          options={{ title: "Map" }}
           component={MapScreen}
+          options={{ title: "Map" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

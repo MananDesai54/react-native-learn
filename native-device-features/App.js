@@ -1,14 +1,24 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { PlaceContext } from "./context/PlaceContext";
 import PlaceNavigator from "./navigation/PlaceNavigator";
+import { Place } from "./models/Place";
 
 export default function App() {
+  const [place, setPlace] = useState([]);
+  const addPlace = ({ title }) => {
+    const newPlace = new Place(Math.random().toString(), title);
+    setPlace((prevPlace) => prevPlace.concat(newPlace));
+  };
+
   return (
-    <View style={styles.container}>
-      <PlaceNavigator />
-      <StatusBar style="auto" />
-    </View>
+    <PlaceContext.Provider value={{ place, addPlace }}>
+      <View style={styles.container}>
+        <PlaceNavigator />
+        <StatusBar style="auto" />
+      </View>
+    </PlaceContext.Provider>
   );
 }
 
@@ -16,7 +26,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
   },
 });

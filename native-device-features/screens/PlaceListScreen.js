@@ -1,11 +1,23 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useContext } from "react";
+import { FlatList } from "react-native";
+import PlaceItem from "../components/PlaceItem";
+import { PlaceContext } from "../context/PlaceContext";
 
-const PlaceListScreen = () => {
+const PlaceListScreen = (props) => {
+  const context = useContext(PlaceContext);
   return (
-    <View>
-      <Text>List</Text>
-    </View>
+    <FlatList
+      data={context.place}
+      renderItem={(itemData) => (
+        <PlaceItem
+          place={itemData.item}
+          onSelect={() =>
+            props.navigation.navigate("PlaceDetail", { place: itemData.item })
+          }
+        />
+      )}
+      keyExtractor={(item) => item.id}
+    />
   );
 };
 
