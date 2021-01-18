@@ -24,7 +24,10 @@ const LocationSelector = (props) => {
       try {
         const location = await Location.getCurrentPositionAsync({});
         console.log(location);
-        setLocation(null);
+        setLocation({
+          lat: location.coords.latitude,
+          long: location.coords.longitude
+        });
       } catch (error) {
         Alert.alert(
           "Location Fetching",
