@@ -5,7 +5,6 @@ import { PlaceContext } from "../context/PlaceContext";
 
 const PlaceListScreen = (props) => {
   const context = useContext(PlaceContext);
-  console.log(context.place);
   return (
     <FlatList
       data={context.place}
